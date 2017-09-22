@@ -11,7 +11,7 @@ type List struct {
 
 // Node ...
 type Node struct {
-	item interface{}
+	Item interface{}
 	next *Node
 	prev *Node
 }
@@ -27,7 +27,7 @@ func NewList() *List {
 // AddNode adds node to the end of the list
 func (l *List) AddNode(item interface{}) {
 	n := &Node{
-		item: item,
+		Item: item,
 		next: nil,
 		prev: nil,
 	}
@@ -47,7 +47,7 @@ func (l *List) AddNode(item interface{}) {
 // GetNode ...
 func (l *List) GetNode(item interface{}) *Node {
 	for n := l.top; ; n = n.next {
-		if item == n.item {
+		if item == n.Item {
 			return n
 		}
 
@@ -62,7 +62,7 @@ func (l *List) GetNode(item interface{}) *Node {
 // InsertAfter ...
 func (l *List) InsertAfter(node interface{}, item interface{}) error {
 	n := &Node{
-		item: item,
+		Item: item,
 		next: nil,
 	}
 
@@ -100,17 +100,21 @@ func (l *List) InsertAfter(node interface{}, item interface{}) error {
 
 // InsertFirst ...
 func (l *List) InsertFirst(item interface{}) {
-	n := &Node{
-		item: item,
-		next: nil,
-		prev: nil,
+	if l.top != nil {
+		n := &Node{
+			Item: item,
+			next: nil,
+			prev: nil,
+		}
+
+		l.top.prev = n
+		n.next = l.top
+		l.top = n
+		l.size++
+	} else {
+		l.AddNode(item)
 	}
 
-	l.top.prev = n
-	n.next = l.top
-	l.top = n
-
-	l.size++
 }
 
 // GetLastNode ...
@@ -121,4 +125,22 @@ func (l *List) GetLastNode() *Node {
 // GetFirstNode ...
 func (l *List) GetFirstNode() *Node {
 	return l.top
+}
+
+// RemoveLastNode ...
+func (l *List) RemoveLastNode() {
+	if l.last == nil {
+		return
+	}
+
+	if l.last == l.top {
+		l.last = nil
+		l.top = nil
+	} else {
+		n := l.last.prev
+		l.last = nil
+		l.last = n
+	}
+
+	l.size--
 }

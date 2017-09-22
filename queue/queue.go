@@ -1,15 +1,18 @@
 package queue
 
-import "github.com/altay13/godatastructures/linkedlist"
+import (
+	"github.com/altay13/godatastructures/doublylinkedlist"
+)
 
 // Queue implementation
 type Queue struct {
-	list *linkedlist.List
+	list *doublylinkedlist.List
+	size int
 }
 
 // NewQueue method creates the stack
 func NewQueue() *Queue {
-	l := linkedlist.NewList()
+	l := doublylinkedlist.NewList()
 	q := &Queue{
 		list: l,
 	}
@@ -19,9 +22,15 @@ func NewQueue() *Queue {
 // Enqueue ...
 func (q *Queue) Enqueue(item interface{}) {
 	q.list.AddNode(item)
+	q.size++
 }
 
 // Dequeue ...
 func (q *Queue) Dequeue() interface{} {
-	return q.list.GetLastNode()
+	n := q.list.GetLastNode()
+	q.list.RemoveLastNode()
+	if n != nil {
+		q.size--
+	}
+	return n.Item
 }
