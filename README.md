@@ -2,10 +2,10 @@
 
 ## Data structures
 
-* Stack
-* Queue
-* Singly-Linked List
-* Doubly-Linked List
+* `Stack`
+* `Queue`
+* `Singly-Linked List`
+* `Doubly-Linked List`
 * `Skip List`
 * `Hash Table`
 * `Binary Search Tree`
