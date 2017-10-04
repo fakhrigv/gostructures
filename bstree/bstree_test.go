@@ -1,0 +1,78 @@
+package bstree
+
+import (
+	"testing"
+)
+
+func TestBSTreePutGet(t *testing.T) {
+	b := NewBSTree()
+
+	b.Put(5, "Item 5")
+	b.Put(7, "Item 7")
+	b.Put(1, "Item 1")
+	b.Put(14, "Item 14")
+	b.Put(10, "Item 10")
+
+	it := b.Get(14)
+	if it != "Item 14" {
+		t.Errorf("Failed to put item. Expected 'Item 14', instead %s", it)
+	}
+
+	it = b.Get(10)
+	if it != "Item 10" {
+		t.Errorf("Failed to put item. Expected 'Item 10', instead %s", it)
+	}
+
+	it = b.Get(100)
+	if it != nil {
+		t.Errorf("Failed to put item. Expected 'nil', instead %s", it)
+	}
+
+}
+
+func TestBSTreeGetSortedArray(t *testing.T) {
+	b := NewBSTree()
+
+	b.Put(5, 5)
+	b.Put(7, 7)
+	b.Put(1, 1)
+	b.Put(14, 14)
+	b.Put(10, 10)
+	b.Put(18, 18)
+	b.Put(3, 3)
+
+	var a []interface{}
+	b.GetSortedArray(&a)
+
+	res := [7]int{1, 3, 5, 7, 10, 14, 18}
+
+	for i := 0; i < len(res); i++ {
+		if res[i] != a[i] {
+			t.Errorf("Failed to sort.")
+		}
+	}
+}
+
+func TestBSTreeContains(t *testing.T) {
+	b := NewBSTree()
+
+	b.Put(5, 5)
+	b.Put(7, 7)
+	b.Put(1, 1)
+	b.Put(14, 14)
+	b.Put(10, 10)
+	b.Put(18, 18)
+	b.Put(3, 3)
+
+	if !b.Contains(5) {
+		t.Errorf("Failed to locate '5' key. Contains method fails.")
+	}
+
+	if !b.Contains(18) {
+		t.Errorf("Failed to locate '18' key. Contains method fails.")
+	}
+
+	if b.Contains(100) {
+		t.Errorf("Failed to locate '100' key. Contains method fails. Should not find the '100' key.")
+	}
+}

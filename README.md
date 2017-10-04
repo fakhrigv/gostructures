@@ -8,6 +8,7 @@
 * `Doubly-Linked List`
 * `Skip List`
 * `Hash Table`
+* `Set`
 * `Priority Queue`
 * `Binary Search Tree`
 * `Cartesian Tree`
