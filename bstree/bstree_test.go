@@ -48,7 +48,7 @@ func TestBSTreeGetSortedArray(t *testing.T) {
 
 	for i := 0; i < len(res); i++ {
 		if res[i] != a[i] {
-			t.Errorf("Failed to sort.")
+			t.Errorf("Failed to sort. %d", a)
 		}
 	}
 }
