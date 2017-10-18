@@ -30,6 +30,50 @@ func TestBSTreePutGet(t *testing.T) {
 
 }
 
+func TestBSTReeRemove(t *testing.T) {
+	b := NewBSTree()
+
+	b.Put(5, "Item 5")
+	b.Put(7, "Item 7")
+	b.Put(2, "Item 2")
+	b.Put(1, "Item 1")
+	b.Put(14, "Item 14")
+	b.Put(10, "Item 10")
+	b.Put(11, "Item 11")
+	b.Put(9, "Item 9")
+	b.Put(6, "Item 6")
+
+	b.Remove(9)
+	if b.Get(9) != nil {
+		t.Errorf("Failed to remove item. Expected 'nil', instead %s", b.Get(9))
+	}
+
+	b.Put(9, "Item 9")
+
+	b.Remove(2)
+	if b.left.value != "Item 1" {
+		t.Errorf("Failed to remove item. Expected 'Item 1', instead %s", b.left.value)
+	}
+
+	b.Remove(14)
+	if b.right.right.value != "Item 10" {
+		t.Errorf("Failed to remove item. Expected 'Item 10', instead %s", b.right.right.value)
+	}
+
+	b.Remove(7)
+	if b.right.value != "Item 9" {
+		t.Errorf("Failed to remove item. Expected 'Item 9', instead %s", b.right.value)
+	}
+
+	node := b.get(9)
+	if node.left.value != nil {
+		t.Errorf("Failed to remove item. Expected 'nil', instead %s", node.left.value)
+	}
+	if node.right.value != "Item 10" {
+		t.Errorf("Failed to remove item. Expected 'Item 10', instead %s", node.right.value)
+	}
+}
+
 func TestBSTreeGetSortedArray(t *testing.T) {
 	b := NewBSTree()
 

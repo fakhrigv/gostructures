@@ -34,6 +34,43 @@ func (b *BSTree) Put(key interface{}, value interface{}) error {
 	return nil
 }
 
+// Remove ...
+func (b *BSTree) Remove(key interface{}) {
+	dNode := b.get(key)
+	var ttmp *BSTree
+
+	if dNode.left.key == nil && dNode.right.key == nil {
+		*dNode = BSTree{}
+	} else if dNode.left.key != nil && dNode.right.key == nil {
+		ttmp = dNode.left
+		*dNode = *ttmp
+	} else if dNode.left.key == nil && dNode.right.key != nil {
+		ttmp = dNode.right
+		*dNode = *ttmp
+	} else {
+		var parent *BSTree
+		lNode := dNode.right
+
+		for {
+			if lNode.left.key != nil {
+				parent = lNode
+				lNode = lNode.left
+			} else {
+				break
+			}
+		}
+
+		ttmp := dNode.right
+		*dNode = *lNode
+		dNode.right = ttmp
+		if parent != nil {
+			parent.left = nil
+		}
+
+	}
+
+}
+
 func (b *BSTree) putRecursive(key interface{}, value interface{}) {
 	if b.key == nil {
 
@@ -54,9 +91,9 @@ func (b *BSTree) putRecursive(key interface{}, value interface{}) {
 	return
 }
 
-func (b *BSTree) getRecursive(key interface{}) interface{} {
+func (b *BSTree) getRecursive(key interface{}) *BSTree {
 	if b.key == key {
-		return b.value
+		return b
 	}
 
 	if b.key == nil {
@@ -68,13 +105,25 @@ func (b *BSTree) getRecursive(key interface{}) interface{} {
 	return n.getRecursive(key)
 }
 
-// Get ...
-func (b *BSTree) Get(key interface{}) interface{} {
+func (b *BSTree) get(key interface{}) *BSTree {
 	if reflect.TypeOf(key) != reflect.TypeOf(b.key) && b.key != nil {
-		return fmt.Errorf("Failed to insert value. Wrong format. Expecting %s, instead %s", reflect.TypeOf(b.key), reflect.TypeOf(key))
+		return nil
 	}
 
-	return b.getRecursive(key)
+	node := b.getRecursive(key)
+
+	return node
+}
+
+// Get ...
+func (b *BSTree) Get(key interface{}) interface{} {
+	node := b.get(key)
+
+	if node != nil {
+		return node.value
+	}
+
+	return nil
 }
 
 func (b *BSTree) getCorrectNode(key interface{}) *BSTree {
