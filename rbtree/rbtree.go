@@ -1,7 +1,6 @@
 package rbtree
 
 import (
-	"fmt"
 	"log"
 )
 
@@ -40,9 +39,8 @@ func NewRBTree() *RBTree {
 	return tree
 }
 
-// AddNode ...
-func (tree *RBTree) AddNode(key uint32, value interface{}) {
-	fmt.Println("AddNode:", key, value, "tree:", tree)
+// Add ...
+func (tree *RBTree) Add(key uint32, value interface{}) {
 	if tree.left == nil {
 		tree.key = key
 		tree.value = value
@@ -103,6 +101,70 @@ func (tree *RBTree) addNode(key uint32, value interface{}) {
 	cTree.addNode(key, value)
 }
 
+// Remove ...
+func (tree *RBTree) Remove(key uint32) {
+	dNode := tree.get(key)
+	log.Println("Removing", dNode)
+	var ttmp *RBTree
+
+	if dNode.left == nilNode && dNode.right == nilNode {
+		*dNode = RBTree{}
+	} else if dNode.left != nilNode && dNode.right == nilNode {
+		ttmp = dNode.left
+		*dNode = *ttmp
+	} else if dNode.left == nilNode && dNode.right != nilNode {
+		ttmp = dNode.right
+		*dNode = *ttmp
+	} else {
+		var parent *RBTree
+		lNode := dNode.right
+
+		for {
+			if lNode.left != nilNode {
+				parent = lNode
+				lNode = lNode.left
+			} else {
+				break
+			}
+		}
+
+		ttmp := dNode.right
+		*dNode = *lNode
+		dNode.right = ttmp
+		if parent != nil {
+			parent.left = nil
+		}
+
+	}
+}
+
+// Get ,,,
+func (tree *RBTree) Get(key uint32) interface{} {
+	t := tree.get(key)
+	if t != nil {
+		return t.value
+	}
+
+	return nil
+}
+
+func (tree *RBTree) get(key uint32) *RBTree {
+	var t *RBTree
+	if tree.key > key {
+		t = tree.left
+	} else if tree.key < key {
+		t = tree.right
+	} else {
+		return tree
+	}
+
+	if t == nilNode {
+		return nil
+	}
+
+	return t.get(key)
+}
+
 func (tree *RBTree) rebalance() {
 	var uncle *RBTree
 	var grand *RBTree
@@ -134,7 +196,7 @@ func (tree *RBTree) rebalance() {
 			if currentPosition == "left" {
 				// turn parent tree to right
 				parent.turnRight()
-				tree.rebalance()
+				parent.rebalance()
 			} else {
 				// change colors
 				parent.color = black
@@ -156,7 +218,7 @@ func (tree *RBTree) rebalance() {
 			if currentPosition == "right" {
 				// turn parent tree to left
 				parent.turnLeft()
-				tree.rebalance()
+				parent.rebalance()
 			} else {
 				// change colors
 				parent.color = black
@@ -192,6 +254,8 @@ func (tree *RBTree) turnLeft() {
 }
 
 func (tree *RBTree) turnRight() {
+
+	log.Println("turning right", tree)
 	var temp RBTree
 	temp = *tree
 
