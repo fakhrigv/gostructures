@@ -138,7 +138,7 @@ func (tree *RBTree) Remove(key uint32) {
 	}
 }
 
-// Get ,,,
+// Get ...
 func (tree *RBTree) Get(key uint32) interface{} {
 	t := tree.get(key)
 	if t != nil {
@@ -254,8 +254,6 @@ func (tree *RBTree) turnLeft() {
 }
 
 func (tree *RBTree) turnRight() {
-
-	log.Println("turning right", tree)
 	var temp RBTree
 	temp = *tree
 
