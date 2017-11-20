@@ -293,6 +293,35 @@ func TestBTree_Add(t *testing.T) {
 	}
 }
 
+func TestBTree_Get(t *testing.T) {
+	tree := getTestTreeWithTwoDepth(t)
+
+	v := tree.Get(23)
+	if v != "child 23" {
+		t.Errorf("Failed to Get an element. Expect value to be 'child 23', instead %s", v)
+	}
+
+	v = tree.Get(28)
+	if v != "child 28" {
+		t.Errorf("Failed to Get an element. Expect value to be 'child 28', instead %s", v)
+	}
+
+	v = tree.Get(40)
+	if v != "Item 40" {
+		t.Errorf("Failed to Get an element. Expect value to be 'child 40', instead %s", v)
+	}
+
+	v = tree.Get(27)
+	if v != "child_child 27" {
+		t.Errorf("Failed to Get an element. Expect value to be 'child 27', instead %s", v)
+	}
+
+	v = tree.Get(100)
+	if v != nil {
+		t.Errorf("Failed to Get an element. Expect value to be 'nil', instead %s", v)
+	}
+}
+
 // building test tree with 1 child node.
 //	 	10 20   30 40
 //	 	      |

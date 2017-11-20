@@ -74,33 +74,32 @@ func (tree *BTree) add(k item) {
 }
 
 // Get ...
-func (tree *BTree) Get(key int32, value interface{}) interface{} {
-	k := item{
-		key:   key,
-		value: value,
-	}
-
-	return tree.get(k)
+func (tree *BTree) Get(key int32) interface{} {
+	return tree.get(key).value
 }
 
-func (tree *BTree) get(k item) *item {
+func (tree *BTree) get(k int32) *item {
 	i := 0
 
 	for ; i < tree.cnt; i++ {
-		if k.key <= tree.keys[i].key {
+		if k <= tree.keys[i].key {
 			break
 		}
 	}
 
-	if i < tree.cnt && k.key == tree.keys[i].key {
+	if i < tree.cnt && k == tree.keys[i].key {
 		return &tree.keys[i]
 	}
 
 	if tree.leaf {
-		return nil
+		return &item{}
 	}
 
-	return tree.children[i+1].get(k)
+	if tree.children[i] != nil {
+		return tree.children[i].get(k)
+	} else {
+		return &item{}
+	}
 }
 
 func (tree *BTree) isKeysFull() bool {
